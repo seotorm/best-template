@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com/DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="social">
+	
+	<!-- SNS 아이디로 등록된 userId 목록을 조회. -->
+	<select id="selectUserIdsByProviderUserId" parameterClass="map" resultClass="string">
+		SELECT
+			userId
+		FROM 
+			UserConnection
+		WHERE
+			providerId = #providerId# 
+		AND providerUserId = #providerUserId#
+	</select>
+
+	<!-- ===============================================
+		 Sns ConnectionData 
+	================================================ -->
+	
+	<!--
+		SNS share 상태를 수정한다.
+		실제 SNS 연동값으로 업데이트한다.
+	 -->
+	<update id="updateShareYn" parameterClass="map">
+		/* strend.sns."updateShareYn" */
+		UPDATE 
+			userConnection
+		SET
+			shreYn = #shareYn#
+		WHERE
+			userId = #userId#
+		AND providerId = #providerId#
+	</update>
+	
+	<!--
+		SNS share 상태를 조회한다.
+	 -->
+	<select id="selectShareYn" parameterClass="map" resultClass="string">
+		/* strend.sns.selectShareYn */
+		SELECT
+			shreYn as shareYn
+		FROM 
+			userConnection
+		WHERE
+			userId = #userId#
+		AND providerId = #providerId#
+	</select>
+
+	<!--
+		SNS 연결 정보를 조회한다.
+	 -->
+	<select id="selectUserConnections" parameterClass="map" resultClass="hashmap">
+		/* strend.sns.selectUserConnections */
+		SELECT
+			providerId, providerUserId, shreYn as shareYn
+		FROM 
+			userConnection
+		WHERE
+			userId = #userId#
+	</select>
+	
+	<!--
+		SNS 연동을 끊었을때 관련 정보를 삭제한다.
+	 -->
+	<delete id="deleteUserConnection" parameterClass="map">
+		/* strend.sns.deleteUserConnection */
+		DELETE FROM 
+			userConnection
+		WHERE
+			providerId = #providerId#
+		AND providerUserId = #providerUserId#
+		
+	</delete>
+	
+	<insert id="insertSessionUser" parameterClass="map">
+		/* strend.invite.insertSessionUser */
+		INSERT INTO st_sns_crt (
+			brwsr_sssn_id
+			, mbr_no
+			, reg_ymdt
+		) VALUES (
+			#sessionId#
+			, #userNo#
+			, CURRENT_DATETIME
+		)
+	</insert>
+	
+	<insert id="updateSessionUser" parameterClass="map">
+		/* strend.invite.updateSessionUser */
+		UPDATE
+		    st_sns_crt
+		SET 
+			mbr_no = #userNo#
+		WHERE
+			brwsr_sssn_id = #sessionId#
+	</insert>
+	
+	<select id="selectSessionUser" parameterClass="string" resultClass="string">
+		/* strend.sns.selectSessionUser */
+		SELECT
+			mbr_no
+		FROM 
+			st_sns_crt
+		WHERE
+			brwsr_sssn_id = #sessionId#
+	</select>
+	
+	<delete id="deleteSession" parameterClass="string">
+		/* strend.sns.deleteSession */
+		DELETE FROM 
+			st_sns_crt
+		WHERE
+			brwsr_sssn_id = #sessionId#
+	</delete>
+</sqlMap>

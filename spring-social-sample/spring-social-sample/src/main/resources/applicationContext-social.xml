@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	   	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<util:properties id="conf"
+		location="classpath:properties/configuration.properties" />
+
+	<import resource="applicationContext-social-enc.xml" />
+
+	<!-- SNS provider 연결정보 저장. -->
+	<bean id="connectionFactoryLocator"
+		class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
+		<property name="connectionFactories">
+			<list>
+				<bean
+					class="org.springframework.social.twitter.connect.TwitterConnectionFactory">
+					<constructor-arg value="#{conf['twitter.consumerKey']}" />
+					<constructor-arg value="#{conf['twitter.consumerSecret']}" />
+				</bean>
+				<bean
+					class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
+					<constructor-arg value="#{conf['facebook.clientId']}" />
+					<constructor-arg value="#{conf['facebook.clientSecret']}" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- connectionRepository Factory Using iBatis DAO 
+	<bean id="usersConnectionRepository"
+		class="com.naver.template.social.connect.DaoUsersConnectionRepository">
+		<constructor-arg ref="connectionFactoryLocator" />
+		<constructor-arg ref="textEncryptor" />
+		<property name="connectionSignUp">
+			<bean class="com.naver.template.social.user.SimpleConnectionSignUp" />
+		</property>
+	</bean>
+	-->
+	
+	<!-- connectionRepository Factory Using JdbcUsersConnectionRepository -->
+	<bean id="usersConnectionRepository"
+		class="org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="connectionFactoryLocator" />
+		<constructor-arg ref="textEncryptor" />
+		<property name="connectionSignUp">
+			<bean class="com.naver.template.social.user.SimpleConnectionSignUp" />
+		</property>
+	</bean>
+
+	<!-- 
+		로그인 사용자의 SNS Connection. 
+		코드에서 직접 usersConnectionRepository를 통해 생성해서 사용할 수도 있으며 그럴 경우 여기에 선언할 필요없음. 
+	//-->
+	<bean id="connectionRepository" factory-method="createConnectionRepository"
+		factory-bean="usersConnectionRepository" scope="request">
+		<constructor-arg>
+			<bean id="userId" factory-method="getUserId" factory-bean="userFactory"
+				scope="request">
+				<constructor-arg value="#{request}" />
+			</bean>
+		</constructor-arg>
+		<!-- ??? -->
+		<aop:scoped-proxy proxy-target-class="false" />
+	</bean>
+
+	<bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors"
+		factory-method="noOpText" />
+
+</beans>
