@@ -21,8 +21,12 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 
+import com.naver.template.social.UserConnectionDAO;
+
 
 /**
+ * UserConnection table 을 다루는 DAO 만들어 JdbcUsersConnectionRepository 대신 사용할 수도 있다.
+ * 단, UserConnectionDAO는 인터페이스 수준으로만 구현함.
  * 
  * @author swseo
  */

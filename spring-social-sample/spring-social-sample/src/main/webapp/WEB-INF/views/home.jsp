@@ -13,13 +13,26 @@
 		</form>
 	</c:if>
 	<ul>
-		<li><a href="<c:url value="/signout" />">Disconnect</a></li>
 		<li>
 		<form name="facebook" action="<c:url value="/signin/facebook" />" method="POST">
 			<a href="javascript:document.facebook.submit()">Connect to Facebook</a>
 		    <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
 		</form>
 		</li>
+		
+		<li>
+		<form name="twitter" action="<c:url value="/signin/twitter" />" method="POST">
+			<a href="javascript:document.twitter.submit()">Connect to Twitter</a>
+		    <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
+		</form>
+		</li>
+		
+		<li><a href="<c:url value="/post/facebook" />">Facebook Posting</a></li>
+		<li><a href="<c:url value="/post/twitter" />">Twitter Posting</a></li>
+	</ul>
+	<ul>
+		<li><a href="<c:url value="/signout/facebook" />">Disconnect Facebook</a></li>
+		<li><a href="<c:url value="/signout/twitter" />">Disconnect Twitter</a></li>
 	</ul>
 	
 	<h3>Status: ${message}</h3>

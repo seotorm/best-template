@@ -18,7 +18,6 @@
 
 	<interceptors>
 		<beans:bean class="com.naver.template.social.user.UserInterceptor">
-			<beans:constructor-arg ref="usersConnectionRepository" />
 		</beans:bean>
 	</interceptors>
 

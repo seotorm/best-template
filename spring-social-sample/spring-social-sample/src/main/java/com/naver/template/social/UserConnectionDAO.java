@@ -5,7 +5,7 @@
  * NHN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.naver.template.social.connect;
+package com.naver.template.social;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.MultiValueMap;
 
-import com.naver.template.social.BaseSqlMapDAO;
+import com.naver.template.common.BaseSqlMapDAO;
 
 /**
  * @author swseo

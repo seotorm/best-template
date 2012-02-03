@@ -13,8 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -30,7 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.naver.template.social.UserConnectionDAO;
+
 /**
+ * UserConnection table 을 다루는 DAO 만들어 JdbcConnectionRepository 대신 사용할 수도 있다.
+ * 단, UserConnectionDAO는 인터페이스 수준으로만 구현함.
+ * 
  * @author swseo
  */
 public class DaoConnectionRepository implements ConnectionRepository {

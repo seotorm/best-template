@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.naver.template.social.IntegrationTestSupporter;
+import com.naver.template.social.UserConnectionDAO;
 
 /**
  * @author swseo

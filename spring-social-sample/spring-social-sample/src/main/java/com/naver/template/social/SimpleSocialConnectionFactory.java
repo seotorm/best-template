@@ -5,7 +5,7 @@
  * NHN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.naver.template.social.connect;
+package com.naver.template.social;
 
 import javax.inject.Inject;
 
@@ -16,8 +16,14 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
 
+/**
+ * Social Connection을 가져오는 클래스. 
+ * 실제 서비스코드에서 이 클래스만 Inject 하여 사용하면 된다.
+ * 
+ * @author swseo
+ */
 @Service
-public class SimpleConnectionFactory {
+public class SimpleSocialConnectionFactory {
 
 	@Inject
 	UsersConnectionRepository usersConnectionRepository;
@@ -52,7 +58,7 @@ public class SimpleConnectionFactory {
 
 	}
 
-	private ConnectionRepository getConnectionRepository(String userNo) {
+	public ConnectionRepository getConnectionRepository(String userNo) {
 		return usersConnectionRepository.createConnectionRepository(userNo);
 	}
 }

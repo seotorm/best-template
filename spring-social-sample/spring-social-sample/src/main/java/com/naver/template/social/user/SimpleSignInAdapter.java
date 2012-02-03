@@ -31,8 +31,19 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public final class SimpleSignInAdapter implements SignInAdapter {
 
+	/**
+	 * SNS Provider 가 OAuth 마지막 단계인 Grant Access Token 을 Server로 전송하는데
+	 * 이때 Server 에서 UserConnection 정보를 Insert 혹은 Update 한 후 호출된다.
+	 * 
+	 * SNS Connection 정보를 어딘가에(cache 등) 저장해야 한다면 여기서 처리하면 되겠다.
+	 * 
+	 * @param userId
+	 * @param connection
+	 * @param request
+	 * @return
+	 * @see org.springframework.social.connect.web.SignInAdapter#signIn(java.lang.String, org.springframework.social.connect.Connection, org.springframework.web.context.request.NativeWebRequest)
+	 */
 	public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-		SecurityContext.setCurrentUser(new User(userId));
 		return null;
 	}
 

@@ -5,7 +5,7 @@
  * NHN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.naver.template.social;
+package com.naver.template.common;
 
 import java.util.List;
 

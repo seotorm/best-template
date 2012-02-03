@@ -21,17 +21,16 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.naver.template.social.connect.SimpleConnectionFactory;
-import com.naver.template.social.user.UserCookieGenerator;
 
 /**
  * Simple little @Controller that invokes Facebook and renders the result.
@@ -44,7 +43,22 @@ public class HomeController {
 	final static Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	@Inject
-	SimpleConnectionFactory simpleConnectionFactory;
+	SimpleSocialConnectionFactory simpleConnectionFactory;
+
+	@Inject
+	SocialPostBO socialPostBO;
+
+	@RequestMapping(value = "/post/{providerId}", method = RequestMethod.GET)
+	public String post(@PathVariable String providerId, HttpServletRequest request) {
+		String userId = getUserIdFromServiceSecurity(request);
+		if ("facebook".equals(providerId)) {
+			socialPostBO.postToFacebook(userId);
+		} else if ("twitter".equals(providerId)) {
+			String message = "test";
+			socialPostBO.postToTwitter(userId, message);
+		}
+		return "redirect:/";
+	}
 
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
 	public String home(Model model, HttpServletRequest request) {
@@ -53,13 +67,13 @@ public class HomeController {
 		try {
 			facebook = simpleConnectionFactory.getFacebook(userId);
 		} catch (IllegalArgumentException e) {
-			model.addAttribute("message", "Login Please");
+			model.addAttribute("message", "Not logged in.");
 			return "home";
 		} catch (Exception e) {
-			model.addAttribute("message", "Connect to SNS please.");
+			model.addAttribute("message", "Not connected.");
 			return "home";
 		}
-		model.addAttribute("message", "Connected to SNS.");
+		model.addAttribute("message", "Connected.");
 		List<Reference> friends = facebook.friendOperations().getFriends();
 		model.addAttribute("friends", friends);
 		return "home";
@@ -72,7 +86,15 @@ public class HomeController {
 	 */
 	private String getUserIdFromServiceSecurity(Model model, HttpServletRequest request) {
 		String userId = userCookieGenerator.readCookieValue(request);
+		if (StringUtils.isBlank(userId)) {
+			userId = null;
+		}
 		model.addAttribute("userId", userId);
+		return userId;
+	}
+
+	private String getUserIdFromServiceSecurity(HttpServletRequest request) {
+		String userId = userCookieGenerator.readCookieValue(request);
 		return userId;
 	}
 
@@ -83,11 +105,17 @@ public class HomeController {
 		log.debug("facebook{}", facebook);
 		List<Reference> friends = facebook.friendOperations().getFriends();
 		model.addAttribute("friends", friends);
-
 		return "friends";
 	}
 
-	UserCookieGenerator userCookieGenerator = new UserCookieGenerator();
+	@RequestMapping(value = "/signout/{providerId}", method = RequestMethod.GET)
+	public String signout(@PathVariable String providerId, HttpServletRequest request) {
+		String userId = getUserIdFromServiceSecurity(request);
+		simpleConnectionFactory.getConnectionRepository(userId).removeConnections(providerId);
+		return "redirect:/";
+	}
+
+	ServiceCookieGenerator userCookieGenerator = new ServiceCookieGenerator();
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model, String userId, HttpServletResponse response) {

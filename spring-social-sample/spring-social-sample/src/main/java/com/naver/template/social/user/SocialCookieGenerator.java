@@ -22,18 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.util.CookieGenerator;
 
 /**
- * 사용하지 않음.
- * ServiceSecurity가 Cookie base가 아닐경우 임시로 사용함.
+ * Service Security 가 Cookie 기반이 아닌경우 임시로 Cookie 사용하기 위해 쓰인다.
  * 
- * Utility class for managing the quick_start user cookie that remembers the signed-in user.
+ * Utility class for managing the social user cookie that remembers the signed-in user.
  * @author Keith Donald
  */
-public final class UserCookieGenerator {
+public final class SocialCookieGenerator {
 
 	private final CookieGenerator userCookieGenerator = new CookieGenerator();
 
-	public UserCookieGenerator() {
-		userCookieGenerator.setCookieName("quickstart_user");
+	public SocialCookieGenerator() {
+		userCookieGenerator.setCookieName("user_for_social");
 	}
 
 	public void addCookie(String userId, HttpServletResponse response) {
