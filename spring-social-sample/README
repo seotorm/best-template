@@ -1,19 +1,22 @@
-개요
-* spring-social(http://www.springsource.org/spring-social)을 이용한 web 인증 및 posting 예제
-* maven project
+[개요]
+- spring-social(http://www.springsource.org/spring-social)을 이용한 web 인증 및 posting 예제
+- maven project
 
-적용기술
-* spring-social
-* H2 Database
+[적용기술]
+- spring-social
+- H2 Database
 
-주요기능
-* facebook & twitter web 인증 예제
-** OAuth 인증이 성공되면 H2 DB에 userId + social connection 정보가 저장된다.
-* posting 예제
+[주요기능]
+- facebook & twitter web 인증 예제
+  OAuth 인증이 성공되면 H2 DB에 userId + social connection 정보가 저장된다.
+- posting 예제
+- DAO를 이용한 DaoConnectionRepository & DaoUserConnectionRepository Sample
+  완성하지는 않았으나 참조하여 작성할수 있는 수준으로 구현함. 
+  UserConnection table customizing 가능함.
 
-주의사항
-* hosts 설정에 테스트 도메인(local.lovemark.it) 추가.
-** OAuth 인증시 callback url로 사용되며, social app에 허용된 도메인 이어야 하기때문. 
+[주의사항]
+- 로컬 서버에서 테스트할때 hosts 설정에 테스트 도메인(local.lovemark.it) 추가해야 함. 
+  OAuth 인증시 callback url로 사용되며, social app에 허용된 도메인 이어야 하기때문임. 
 
-비고
-* spring-social-quickstart-3.0.x 참조하여 작성.
+[비고]
+* spring-social-quickstart-3.0.x 참조하여 작성하였음.
