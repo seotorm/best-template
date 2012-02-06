@@ -264,5 +264,62 @@
 
 	<build>
 		<finalName>spring-social-sample</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources-${env}</directory>
+			</resource>
+		</resources>
 	</build>
+
+	<profiles>
+		<!-- Local server -->
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env>local</env>
+				<deploy-path>deploy</deploy-path>
+			</properties>
+		</profile>
+
+		<!-- Development server -->
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+		</profile>
+
+		<!-- QA server -->
+		<profile>
+			<id>alpha</id>
+			<properties>
+				<env>alpha</env>
+			</properties>
+		</profile>
+
+		<!-- Staging server -->
+		<profile>
+			<id>beta</id>
+			<properties>
+				<env>beta</env>
+			</properties>
+		</profile>
+
+		<!-- real server -->
+		<profile>
+			<id>release</id>
+			<properties>
+				<env>release</env>
+			</properties>
+		</profile>
+
+	</profiles>
+
 </project>
