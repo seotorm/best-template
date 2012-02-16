@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.Reference;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -105,6 +106,19 @@ public class HomeController {
 		log.debug("facebook{}", facebook);
 		List<Reference> friends = facebook.friendOperations().getFriends();
 		model.addAttribute("friends", friends);
+		model.addAttribute("providerId", "facebook");
+		return "friends";
+	}
+	
+	@Inject
+	TwitterBO twitterBO;
+	
+	@RequestMapping(value = "/friends/twitter", method = RequestMethod.GET)
+	public String getTwitterFriends(Model model, HttpServletRequest request) {
+		String userId = getUserIdFromServiceSecurity(model, request);
+		List<TwitterProfile> friends = twitterBO.getFriendListParallel(userId);
+		model.addAttribute("friends", friends);
+		model.addAttribute("providerId", "twitter");
 		return "friends";
 	}
 
