@@ -18,16 +18,8 @@ import org.apache.commons.lang.ArrayUtils;
 public class ChunkUtils {
 
 	public static long[] toPrimitiveArray(List<Long> list) {
-
 		Long[] array = list.toArray(new Long[0]);
 		return ArrayUtils.toPrimitive(array);
-
-		//		long[] longArray = new long[list.size()];
-		//		int i = 0;
-		//		for (long prop : list) {
-		//			longArray[i++] = prop;
-		//		}
-		//		return longArray;
 	}
 
 	public static <T> List<List<T>> chunk(List<T> list, int chunkSize) {
